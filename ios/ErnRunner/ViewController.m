@@ -25,27 +25,43 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-
+    
+    MoviesAPI* moviesApi = [[MoviesAPI alloc] init];
+    
+    [moviesApi.requests registerGetTopRatedMoviesRequestHandlerWithHandler:^(id  _Nullable data, ElectrodeBridgeResponseCompletionHandler  _Nonnull block) {
+        NSMutableArray<Movie *> *movies = [[NSMutableArray alloc] init];
+        
+        [movies addObject:[self createMovie:@"1" title:@"The Shawshank Redemption" releaseYear:@1994 rating:@9.2 imageUrl:@"http://bit.ly/2xZm1Zr"]];
+        [movies addObject:[self createMovie:@"2" title:@"The Godfather" releaseYear:@1972 rating:@9.2 imageUrl:@"http://bit.ly/2wK5TuA"]];
+        [movies addObject:[self createMovie:@"3" title:@"The Godfather: Part II" releaseYear:@1974 rating:@9 imageUrl:@"http://bit.ly/2yysiIA"]];
+        [movies addObject:[self createMovie:@"4" title:@"The Dark Knight" releaseYear:@2008 rating:@9 imageUrl:@"http://bit.ly/2iZPBqw"]];
+        [movies addObject:[self createMovie:@"5" title:@"12 Angry Men" releaseYear:@1957 rating:@8.9 imageUrl:@"http://bit.ly/2xwkt7r"]];
+        
+        block(movies, nil);
+    }];
+    
     UIViewController *viewController =
     [[ElectrodeReactNative sharedInstance] miniAppWithName:MainMiniAppName properties:nil];
+    [viewController setTitle:@"MovieList MiniApp"];
     viewController.view.frame = [UIScreen mainScreen].bounds;
-    [self.view addSubview:viewController.view];
+    self.navigationBar.translucent = NO;
+    [self pushViewController:viewController animated:NO];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (Movie *) createMovie : (NSString*) movieId title: (NSString*) title releaseYear: (NSNumber*) releaseYear rating: (NSNumber*) rating imageUrl: (NSString*) imageUrl {
+    
+    NSMutableDictionary* movieDict = [[NSMutableDictionary alloc]init];
+    [movieDict setObject:movieId forKey:@"id"];
+    [movieDict setObject:title forKey:@"title"];
+    [movieDict setObject:releaseYear forKey:@"releaseYear"];
+    [movieDict setObject:imageUrl forKey:@"imageUrl"];
+    
+    Movie *movie =[[Movie alloc] initWithDictionary:movieDict];
+    return movie;
 }
-*/
 
 @end
