@@ -13,30 +13,43 @@ import {
   TouchableHighlight
 } from "react-native";
 
+import { MoviesApi } from 'react-native-ernmovie-api'
+
 export default class MovieListMiniApp extends Component {
-  constructor() {
-    super();
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2
-    });
+  constructor () {
+    super()
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+
+    let topMovies = []
+    MoviesApi.requests().getTopRatedMovies().then((movies) => {
+      if (movies) {
+        this.setState(previousState => {
+          return {dataSource: ds.cloneWithRows(movies)}
+        })
+      }
+    }).catch(error => {
+      topMovies = [{
+        title: 'Titanic',
+        releaseYear: 1997,
+        ratings: '4.5',
+        imageUrl: 'http://bit.ly/2hnU8mq',
+        description: 'Titanic'
+      }, {
+        title: 'Avatar',
+        releaseYear: 2009,
+        ratings: '4.0',
+        imageUrl: 'http://bit.ly/2xAX0Cv',
+        description: 'Avatar'
+      }]
+
+      this.setState(previousState => {
+        return {dataSource: ds.cloneWithRows(topMovies)}
+      })
+    })
+
     this.state = {
-      dataSource: ds.cloneWithRows([
-        {
-          title: "The Fast and Furious",
-          releaseYear: 2010,
-          ratings: "4.5",
-          imageUrl: "http://bit.ly/2jRUZwE",
-          description: "The Fast and the Furious"
-        },
-        {
-          title: "2 Fast 2 Furious",
-          releaseYear: 2011,
-          ratings: "4.0",
-          imageUrl: "http://bit.ly/2jTfYPF",
-          description: "How fast do you like it ?"
-        }
-      ])
-    };
+      dataSource: ds.cloneWithRows(topMovies)
+    }
   }
 
   render() {

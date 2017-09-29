@@ -1285,6 +1285,10 @@ event-target-shim@^1.0.5:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/event-target-shim/-/event-target-shim-1.1.1.tgz#a86e5ee6bdaa16054475da797ccddf0c55698491"
 
+events@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
+
 exec-sh@^0.2.0:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/exec-sh/-/exec-sh-0.2.1.tgz#163b98a6e89e6b65b47c2a28d215bc1f63989c38"
@@ -2709,6 +2713,21 @@ react-devtools-core@^2.5.0:
   dependencies:
     shell-quote "^1.6.1"
     ws "^2.0.3"
+
+react-native-electrode-bridge@1.5.9:
+  version "1.5.9"
+  resolved "https://registry.yarnpkg.com/react-native-electrode-bridge/-/react-native-electrode-bridge-1.5.9.tgz#0510c2050e23267524d8dfb52ed7a8e441ae37e0"
+  dependencies:
+    events "^1.1.1"
+    uuid "^3.0.0"
+
+react-native-ernmovie-api@0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/react-native-ernmovie-api/-/react-native-ernmovie-api-0.0.9.tgz#e226db7966a83d73d1711c1b9924961a11c335ab"
+
+react-native-ernnavigation-api@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-ernnavigation-api/-/react-native-ernnavigation-api-0.0.3.tgz#d529c20e0e3faf9b0bbda6767aa29e09e6e92cda"
 
 react-native@0.48.3:
   version "0.48.3"
