@@ -23,4 +23,4 @@
 #import <UIKit/UIKit.h>
 
 NSString *const MainMiniAppName = @"MovieListMiniApp";
-BOOL const RnDevSupportEnabled = YES;
+BOOL const RnDevSupportEnabled = NO;

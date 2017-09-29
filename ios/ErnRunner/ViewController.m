@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import "AppDelegate.h"
 #import "ViewController.h"
 #import "RunnerConfig.h"
 #import <ElectrodeContainer/ElectrodeContainer.h>
@@ -38,6 +39,25 @@
         [movies addObject:[self createMovie:@"5" title:@"12 Angry Men" releaseYear:@1957 rating:@8.9 imageUrl:@"http://bit.ly/2xwkt7r"]];
         
         block(movies, nil);
+    }];
+    
+    NavigationAPI *navigationAPI = [[NavigationAPI alloc] init];
+    [navigationAPI.requests registerNavigateRequestHandlerWithHandler:^(id  _Nullable data, ElectrodeBridgeResponseCompletionHandler  _Nonnull block) {
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NavigateData *navData = (NavigateData *)data;
+        NSMutableDictionary *initialPapyload = [[NSMutableDictionary alloc]init];
+        [initialPapyload setObject:navData.initialPayload forKey:@"payload"];
+        
+        UIViewController *viewController = [[ElectrodeReactNative sharedInstance] miniAppWithName:navData.miniAppName properties:initialPapyload];
+        viewController.view.frame = [UIScreen mainScreen].bounds;
+        [viewController setTitle:@"MovieDetails MiniApp"];
+        
+        
+        UINavigationController *navController = (UINavigationController *) appDelegate.window.rootViewController;
+        [navController pushViewController:viewController animated:NO];
+        
+        block(nil, nil);
     }];
     
     UIViewController *viewController =

@@ -13,43 +13,52 @@ import {
   TouchableHighlight
 } from "react-native";
 
-import { MoviesApi } from 'react-native-ernmovie-api'
+import { MoviesApi } from "react-native-ernmovie-api";
+import { NavigationApi } from "react-native-ernnavigation-api";
 
 export default class MovieListMiniApp extends Component {
-  constructor () {
-    super()
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+  constructor() {
+    super();
+    const ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    });
 
-    let topMovies = []
-    MoviesApi.requests().getTopRatedMovies().then((movies) => {
-      if (movies) {
-        this.setState(previousState => {
-          return {dataSource: ds.cloneWithRows(movies)}
-        })
-      }
-    }).catch(error => {
-      topMovies = [{
-        title: 'Titanic',
-        releaseYear: 1997,
-        ratings: '4.5',
-        imageUrl: 'http://bit.ly/2hnU8mq',
-        description: 'Titanic'
-      }, {
-        title: 'Avatar',
-        releaseYear: 2009,
-        ratings: '4.0',
-        imageUrl: 'http://bit.ly/2xAX0Cv',
-        description: 'Avatar'
-      }]
-
-      this.setState(previousState => {
-        return {dataSource: ds.cloneWithRows(topMovies)}
+    let topMovies = [];
+    MoviesApi.requests()
+      .getTopRatedMovies()
+      .then(movies => {
+        if (movies) {
+          this.setState(previousState => {
+            return { dataSource: ds.cloneWithRows(movies) };
+          });
+        }
       })
-    })
+      .catch(error => {
+        topMovies = [
+          {
+            title: "Titanic",
+            releaseYear: 1997,
+            ratings: "4.5",
+            imageUrl: "http://bit.ly/2hnU8mq",
+            description: "Titanic"
+          },
+          {
+            title: "Avatar",
+            releaseYear: 2009,
+            ratings: "4.0",
+            imageUrl: "http://bit.ly/2xAX0Cv",
+            description: "Avatar"
+          }
+        ];
+
+        this.setState(previousState => {
+          return { dataSource: ds.cloneWithRows(topMovies) };
+        });
+      });
 
     this.state = {
       dataSource: ds.cloneWithRows(topMovies)
-    }
+    };
   }
 
   render() {
@@ -58,24 +67,40 @@ export default class MovieListMiniApp extends Component {
         style={styles.container}
         dataSource={this.state.dataSource}
         renderRow={movie => (
-          <View style={styles.row}>
-            <Image
-              style={styles.icon}
-              source={{
-                uri: movie.imageUrl ? movie.imageUrl : "http://bit.ly/2yz3AYe"
-              }}
-            />
-            <View style={styles.row2}>
-              <Text style={styles.title}>{movie.title}</Text>
-              <Text style={styles.subtitle}>{movie.releaseYear}</Text>
+          <TouchableHighlight
+            onPress={() => this._onPressRow(movie)}
+            underlayColor="gray"
+          >
+            <View style={styles.row} onPress={() => this._onPressRow(movie)}>
+              <Image
+                style={styles.icon}
+                source={{
+                  uri: movie.imageUrl ? movie.imageUrl : "http://bit.ly/2yz3AYe"
+                }}
+              />
+              <View style={styles.row2}>
+                <Text style={styles.title}>{movie.title}</Text>
+                <Text style={styles.subtitle}>{movie.releaseYear}</Text>
+              </View>
             </View>
-          </View>
+          </TouchableHighlight>
         )}
         renderSeparator={(sectionId, rowId) => (
           <View key={rowId} style={styles.separator} />
         )}
       />
     );
+  }
+
+  _onPressRow(movie) {
+    movie.isSelect = !movie.isSelect;
+    NavigationApi.requests()
+      .navigate("MovieDetailsMiniApp", {
+        initialPayload: JSON.stringify(movie)
+      })
+      .catch(() => {
+        console.log("Navigation failed.");
+      });
   }
 }
 
